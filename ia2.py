@@ -6,13 +6,13 @@ from math import pow
 
 class Particle:
     def __init__(self):
-        self.x = 0
-        self.y = 0
+        self.x1 = 0
+        self.y2 = 0
+        self.pb = [-100, 100]
         self.velocidade = 0
 
 
-def criaParticulas():
-    # 1.Determina o número de partículas P da população
+def criaParticulas():  # 1.Determina o número de partículas P da população
     n = int(input("Entre com o numero de particulas:"))
     particulas[n] = []
     for i in range(n):  # 2.Inicializa aleatoriamente a posição inicial(x) de cada partícula p de P
@@ -25,8 +25,8 @@ def criaParticulas():
 def rodaFuncao(particulas, n):
     melhorParticula = 0
     for i in range(n):  # 4.(a). Calcula Aptidão fp = f(p)
-        f[i] = 0.5 + (pow(sin(sqrt(pow(particulas[i].x, 2) + (pow(particulas[i].y, 2))), 2)) -
-                  0.5)/pow((1 + 0.001 * (pow(particulas[i].x, 2) + (pow(particulas[i].y, 2))), 2))
+        f[i] = 0.5 + (pow(sin(sqrt(pow(particulas[i].x1, 2) + (pow(particulas[i].x2, 2))), 2)) -
+                  0.5)/pow((1 + 0.001 * (pow(particulas[i].x1, 2) + (pow(particulas[i].x2, 2))), 2))
         if(f[i] > melhorParticula):
             melhorParticula = f[i]
             print(melhorParticula)
@@ -38,24 +38,34 @@ def atribuiVelocidade(particulas, n):
         velocidade[i] = (uniform(min(limiteVelocidade[0]), max(limiteVelocidade[1]))
          particulas[i].velocidade=velocidade[i]
          print(velocidade[i])
+    return particulas
 
+def atualizaVelocidade(particulas, n):
+    novaVelocidade=0
+    for i in range(n):
+        novaVelocidade=particulas[i].velocidade + (particulas[i].x1 * rand(0, 1) * (
+            particulas[i].pb[0] - particulas[i].x1)) + particulas[i].x2 * rand(0, 1)*(gb - particulas[i].x2)
+        particulas[i].velocidade=novaVelocidade
+        verificaVelocidade(particulas)
+        print(novaVelocidade)
 
 # def verificaVelocidade():
-#     for particula in particulas
+#     for particula in particulas:
 #        if particula.velocidade > limiteVelocidade[1]
 #             particula.velocidade = limiteVelocidade[1]
-#             particula[0] = 100
-#             particula[1] = 100
+#             particula.x1 = 100
+#             particula.x2 = 100
 #             particula.velocidade = 0
-#         else if particula.velocidade < limiteVelocidade[0]
+#         else if particula.velocidade < limiteVelocidade[0]:
 #            particula.velocidade = limiteVelocidade[0]
-#            particula[0] = -100
-#            particula[1] = -100
+#            particula.x1 = -100
+#            particula.x2 = -100
 #            particula.velocidade = 0
 
 dominio1=[-100, 100]
 dominio2=[-100, 100]
 limiteVelocidade=[-15, 15]
+gB=[-100, 100]
 criaParticulas()
 atribuiVelocidade(particulas, n)
 inte=int(input("Entre com o numero de interacoes:"))
